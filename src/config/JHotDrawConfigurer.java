@@ -1,6 +1,6 @@
 package config;
 
-public class JHotDrawConfigurer implements Configurer {
+public class JHotDrawConfigurer implements IConfigurer {
 
 	@Override
 	public int getFromRevision() {

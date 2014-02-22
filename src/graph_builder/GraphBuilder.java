@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 import org.tmatesoft.svn.core.wc.SVNClientManager;
 
-import config.Configurer;
+import config.IConfigurer;
 
 public abstract class GraphBuilder {
 	Graph graph;
-	Configurer config;
+	IConfigurer config;
 	SVNClientManager svnClient;
 	
 	public GraphBuilder()
@@ -17,7 +17,7 @@ public abstract class GraphBuilder {
 		this.config = null;
 	}
 	
-	public GraphBuilder(Configurer config)
+	public GraphBuilder(IConfigurer config)
 	{
 		graph = new Graph();
 		this.config = config;
