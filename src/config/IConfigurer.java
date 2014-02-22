@@ -1,6 +1,6 @@
 package config;
 
-public interface Configurer {
+public interface IConfigurer {
 	int getFromRevision();
 	int getToRevision();
 	String getURL();
