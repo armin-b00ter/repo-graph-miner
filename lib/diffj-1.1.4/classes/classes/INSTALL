@@ -1,0 +1,7 @@
+Installing DiffJ requires ant, from ant.apache.org.
+
+To install, run:
+
+    % ant
+    % sudo ant install
+
