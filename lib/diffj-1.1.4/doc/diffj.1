@@ -1,0 +1,154 @@
+.\" ** You probably do not want to edit this file directly **
+.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
+.\" Instead of manually editing it, you probably should edit the DocBook XML
+.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
+.TH "DIFFJ" "1" "04/26/2009" "" ""
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+diffj \- compares Java files
+.SH "SYNOPSIS"
+.HP 6
+\fBdiffj\fR [\fB\-\-brief\fR] [[\fB\-\-recurse\fR] [\fB\-r\fR]] [\fB\-\-source\fR\fI=VERSION\fR] [\fB\-\-from\-source\fR\fI=VERSION\fR] [\fB\-\-to\-source\fR\fI=VERSION\fR] [\fB\-\-version\fR] [\fB\-\-verbose\fR] {\fIfrom\fR} {\fIto\fR}
+.SH "DESCRIPTION"
+.PP
+diffj
+is an application that compares Java files and projects. It operates similarly to diff(1), but compares only Java tokens and types, and skips whitespace and comments.
+.SH "OPTIONS"
+.TP
+\fB\-\-brief\fR
+Whether to list differences in long form (the default) or in terse format. The long form resembles output from diff(1), and the brief form lists only the locations and summary of what changed, but not the changes themselves, such as:
+.sp
+.sp
+.nf
+    org/incava/util/TimedEvent.java <=> ../doctorj/org/incava/util/TimedEvent.java
+    4a4: import added: org.incava.log.Log
+    4d4: import removed: org.incava.qualog.QLog
+    27c27,29: code changed
+    28c30: code changed
+.fi
+.sp
+.sp
+By default, violations are displayed in
+\(lqlong form\(rq, showing the context.
+.TP
+\fB\-\-recurse\fR \fB\-r\fR
+Sets processing recursively. This option presumes that the final two arguments are directories. Each .java file in each directory will be compared to the equivalently\-named file in the other directory hierarchy.
+.TP
+\fB\-\-source\fR\fI=VERSION\fR
+Sets the source version of both the from and the to files. The version is for determining the grammar with which to parse the input files.
+\fIVERSION\fR
+may be 1.3, 1.4, 1.5, or 1.6. The default is 1.5.
+.TP
+\fB\-\-from\-source\fR\fI=VERSION\fR
+Sets the source version of the from (left\-hand side) files.
+.TP
+\fB\-\-to\-source\fR\fI=VERSION\fR
+Sets the source version of the to (right\-hand side) files.
+.TP
+\fB\-\-verbose\fR
+Produces debugging output. Note that this signficantly impedes performance.
+.TP
+\fB\-\-version\fR
+Displays the version, and exits.
+.TP
+\fBfrom\fR \fBto\fR
+Specifies the files or directories to check. If both
+\fBfrom\fR
+and
+\fBto\fR
+are directories, then all files ending in
+\(lq.java\(rq
+under those directories will be analyzed. If one is a file and the other is a directory, then the equivalently\-named file would be sought.
+.SH "EXAMPLES"
+.PP
+To compare two files:
+.sp
+.nf
+% diffj String.java lang/String.java
+.fi
+.PP
+Equivalently, assuming that String.java exists in lang:
+.sp
+.nf
+% diffj String.java lang
+.fi
+.PP
+To compare all files in two directories:
+.sp
+.nf
+% diffj app\-old app\-new
+.fi
+.PP
+To compare all files in two directory hierarchies:
+.sp
+.nf
+% diffj \-\-recurse app\-old app\-new
+.fi
+.PP
+To compare Java 1.3 code:
+.sp
+.nf
+% diffj \-\-source=1.3 app\-old app\-new
+.fi
+.PP
+To compare Java 1.5 code:
+.sp
+.nf
+% diffj \-\-source=1.5 app\-old app\-new
+.fi
+.PP
+To compare Java 1.3 against 1.4 code:
+.sp
+.nf
+% diffj \-\-from\-source=1.3 app\-old app\-new
+.fi
+.PP
+To compare Java 1.4 against 1.5 code:
+.sp
+.nf
+% diffj \-\-to\-source=1.5 app\-old app\-new
+.fi
+.PP
+To compare Java 1.3 against 1.5 code:
+.sp
+.nf
+% diffj \-\-to\-source=1.3 \-\-to\-source=1.5 app\-old app\-new
+.fi
+.SH "CONFIGURATION"
+.PP
+\fB$HOME/.diffjrc\fR
+.PP
+The run\-control file, of the form:
+.sp
+.nf
+    source: 1.4
+    verbose: false
+         
+.fi
+.sp
+.SH "AUTHOR"
+.PP
+Jeff Pace
+<jpace@incava.org>.
+.PP
+The DiffJ web site is at
+\fI\%http://www.incava.org/projects/java/diffj\fR.
+.SH "BUGS"
+.PP
+Bugs and issues should be emailed to the author: Jeff Pace<jpace@incava.org>
+.SH "SEE ALSO"
+.PP
+\fBdiff\fR(1)
+.SH "COPYRIGHT"
+.PP
+Copyright (c) 2005\-2006, Jeff Pace.
+.PP
+All Rights Reserved. This module is free software. It may be used, redistributed and/or modified under the terms of the
+[1]\&\fILesser GNU Public License\fR
+.SH "REFERENCES"
+.TP 3
+1.\ Lesser GNU Public License
+\%http://www.gnu.org/licenses/lgpl.html

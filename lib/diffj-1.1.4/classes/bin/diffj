@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# java must be in path
+
+DIFFJ_PROPERTIES=""
+
+# if this is in /usr/bin, jar file is expected as /usr/share/diffj/diffj.jar
+
+batchfile="$0"
+batchdir=`dirname $batchfile`
+prefix=`dirname $batchdir`
+
+jarfile=$prefix/share/diffj/diffj.jar
+
+if [ -n "$CLASSPATH" ]; then
+   CLASSPATH="${jarfile}:$CLASSPATH"
+else
+   CLASSPATH="${jarfile}"
+fi
+
+DIFFJ_PROPERTIES="-Ddiffj.dir=$prefix/share/diffj $DIFFJ_PROPERTIES"
+
+java -cp $CLASSPATH -Xmx512m $DIFFJ_PROPERTIES org.incava.diffj.DiffJ "$@"

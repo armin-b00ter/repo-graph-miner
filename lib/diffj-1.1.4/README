@@ -1,0 +1,18 @@
+The files in this directory and its contained subdirectories collectively
+comprise the distribution of the DiffJ utility.
+
+See COPYING for license information. You must accept the terms of the license
+agreement to use this software.
+
+This software is licensed under the LGPL.
+
+See the ChangeLog for file revision history.
+
+For instructions on how to build and install DiffJ, see the INSTALL file.
+
+A man page is included in the 'doc' directory. More documentation is obtained by
+running --help with the distributed applications.
+
+A diffj.spec is provided for use with RPM (Red Hat Package Manager)
+
+Complete program source is provided in subdirectories.
