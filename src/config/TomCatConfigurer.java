@@ -3,13 +3,13 @@ package config;
 public class TomCatConfigurer implements IConfigurer {
 
 	@Override
-	public int getFromRevision() {
+	public int getStartRevision() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int getToRevision() {
+	public int getEndRevision() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -28,6 +28,18 @@ public class TomCatConfigurer implements IConfigurer {
 
 	@Override
 	public String convertPathName(String path) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getUserName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getPassword() {
 		// TODO Auto-generated method stub
 		return null;
 	}

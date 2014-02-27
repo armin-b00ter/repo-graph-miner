@@ -1,9 +1,11 @@
 package config;
 
 public interface IConfigurer {
-	int getFromRevision();
-	int getToRevision();
+	int getStartRevision();
+	int getEndRevision();
 	String getURL();
 	boolean igonreThisPath(String path);
 	String convertPathName(String path);
+	String getUserName();
+	String getPassword();
 }

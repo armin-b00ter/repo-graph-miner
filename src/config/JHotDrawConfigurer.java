@@ -2,16 +2,20 @@ package config;
 
 public class JHotDrawConfigurer implements IConfigurer {
 
+	int startRevision = 0;
+	int endRevision = 0;//-1;//HEAD (the latest) revision
+	String URL = "";
+	
 	@Override
-	public int getFromRevision() {
+	public int getStartRevision() {
 		// TODO Auto-generated method stub
-		return 0;
+		return startRevision;
 	}
 
 	@Override
-	public int getToRevision() {
+	public int getEndRevision() {
 		// TODO Auto-generated method stub
-		return 0;
+		return endRevision;
 	}
 
 	@Override
@@ -28,6 +32,18 @@ public class JHotDrawConfigurer implements IConfigurer {
 
 	@Override
 	public String convertPathName(String path) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getUserName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getPassword() {
 		// TODO Auto-generated method stub
 		return null;
 	}
