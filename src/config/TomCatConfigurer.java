@@ -44,4 +44,10 @@ public class TomCatConfigurer implements IConfigurer {
 		return null;
 	}
 
+	@Override
+	public String[] getConcernInputPaths() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

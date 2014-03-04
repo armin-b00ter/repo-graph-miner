@@ -47,4 +47,10 @@ public class JHotDrawConfigurer implements IConfigurer {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public String[] getConcernInputPaths() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

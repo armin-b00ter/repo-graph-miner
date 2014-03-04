@@ -8,4 +8,5 @@ public interface IConfigurer {
 	String convertPathName(String path);
 	String getUserName();
 	String getPassword();
+	String[] getConcernInputPaths();
 }
