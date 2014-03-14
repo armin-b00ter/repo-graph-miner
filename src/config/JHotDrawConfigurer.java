@@ -2,49 +2,54 @@ package config;
 
 public class JHotDrawConfigurer implements IConfigurer {
 
+	String userName;
+	String Password;
 	int startRevision = 0;
 	int endRevision = 0;//-1;//HEAD (the latest) revision
 	String URL = "";
 	
 	@Override
 	public int getStartRevision() {
-		// TODO Auto-generated method stub
 		return startRevision;
 	}
 
 	@Override
 	public int getEndRevision() {
-		// TODO Auto-generated method stub
 		return endRevision;
 	}
 
 	@Override
 	public String getURL() {
-		// TODO Auto-generated method stub
-		return null;
+		return URL;
 	}
 
 	@Override
 	public boolean igonreThisPath(String path) {
-		// TODO Auto-generated method stub
+		if(path.contains("src") == false || path.contains("test") == true){
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public String convertPathName(String path) {
-		// TODO Auto-generated method stub
-		return null;
+		if(!path.contains("src/")){
+			return path;
+		}
+		
+		String ret = path.split("src/")[1];
+		if(ret.contains("jhotdraw/"))		
+			ret = ret.split("jhotdraw/")[1]; 
+		return ret;
 	}
 
 	@Override
 	public String getUserName() {
-		// TODO Auto-generated method stub
-		return null;
+		return userName;
 	}
 
 	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
-		return null;
+		return Password;
 	}
 }
