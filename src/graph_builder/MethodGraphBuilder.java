@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -18,11 +19,12 @@ import java.util.Set;
 
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
 import org.tmatesoft.svn.core.wc.admin.SVNLookClient;
+
+import config.IConfigurer;
 
 public class MethodGraphBuilder extends GraphBuilder {
 
@@ -34,9 +36,7 @@ public class MethodGraphBuilder extends GraphBuilder {
 
 	
 	private Pair<ChangeSetList, EntityIDMap> extractAndReinforce(
-			List<SVNLogEntry> logEntries, int reinforcementInterval,
-			int minChangeSetSize, int maxChangeSetSize,
-			Map<String, String> config) {
+			List<SVNLogEntry> logEntries, IConfigurer config) {
 		// Do this just to be sure (e.g. when GetLogEntries has been skipped)
 		GetLogEntries.setupLibrary();
 		
@@ -45,12 +45,13 @@ public class MethodGraphBuilder extends GraphBuilder {
 		ChangeSetList changeSets = new ChangeSetList();
 
 		// The following is actually only needed for method-level mining, but is
-		// kept here to maximise code re-use
-		String url = config.get("url");
-		String name = config.get("name");
-		String password = config.get("password");
+		// kept here to maximize code re-use
+		String url = config.getURL();
+		String name = config.getUserName();
+		String password = config.getPassword();
 
 		ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(name, password);
+		//-------------------------- ta inja tuye Graph builder ---------------------------
 		SVNLookClient lookClient = new SVNLookClient(authManager, null);
 
 		MySVNDiffGenerator diffGenerator = new MySVNDiffGenerator();
@@ -71,30 +72,27 @@ public class MethodGraphBuilder extends GraphBuilder {
 				changeSet.revisions.add(logEntry.getRevision());
 				changeSets.add(changeSet);
 
-			fillChangeSet(changeSet, logEntry, fileIDs, config, lookClient);
+			fillChangeSet(changeSet, logEntry, fileIDs, lookClient);
 
 
-		}		
+		}
+		////////////////////////////////
 		fileIDs.createReverseMap();		// Allow reverse lookup
+		////////////////////////////////
 
 		return Tuple.from(changeSets, fileIDs);
 	}
 	
 	
 	protected List<Integer> fillChangeSet(Set<Integer> changeSet, SVNLogEntry logEntry,
-			EntityIDMap entityIDs, Map<String, String> config,
-			SVNLookClient lookClient) {
+			EntityIDMap entityIDs, SVNLookClient lookClient) {
 		long revision = logEntry.getRevision();
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-//        if(Util.verbose) System.out.print(dateFormat.format(date) + "\t");
+
 		System.out.println("Getting changed methods for revision " + revision);
-		String url = config.get("url");
-		String localUrl = config.get("localUrl");
+		String url = config.getURL();
+		String localUrl = config.getLocalURL();//repository root directory path
 		
 		try {
-			SVNURL svnurl = SVNURL.parseURIEncoded(url);
-
 			PipedOutputStream out = new PipedOutputStream();
 			PipedInputStream in = new PipedInputStream(out);
 			BufferedReader b = new BufferedReader(new InputStreamReader(in));
@@ -102,14 +100,7 @@ public class MethodGraphBuilder extends GraphBuilder {
 			DiffJReader diffJReader = new DiffJReader(b, diffJParser);
 			new Thread(diffJReader).start();
 
-			/*Map<String, SVNLogEntryPath> changedPaths = logEntry.getChangedPaths();
-			for (SVNLogEntryPath changedPath : changedPaths.values()) {
-				if (!entryPathShouldBeIgnored(changedPath)) {*/
 					try {
-//						SVNURL svnurl = SVNURL.parseURIEncoded("svn://localhost/jhotdraw" + changedPath.getPath());
-						/*diffClient.doDiff(svnurl, SVNRevision.create(revision - 1),
-								svnurl, SVNRevision.create(revision),
-								SVNDepth.INFINITY, true, out);*/
 						lookClient.doGetDiff(new File(localUrl), SVNRevision.create(revision), false, true, true, out);
 					} catch (SVNException e) {
 						System.out
@@ -117,9 +108,6 @@ public class MethodGraphBuilder extends GraphBuilder {
 										+ revision);
 						e.printStackTrace();
 					}
-//				}
-//			}
-
 			diffJReader.stop();
 			while(!diffJReader.hasStopped) System.out.print(".");
 			b.close();
@@ -160,8 +148,6 @@ public class MethodGraphBuilder extends GraphBuilder {
 						String line = this.reader.readLine();
 						if (line != null) {
 							this.parser.parseLine(line);
-//							System.out.println(line);
-							// _invoker.printFeedback(line);
 						}
 					}
 				} catch (IOException e) {
@@ -187,10 +173,6 @@ public class MethodGraphBuilder extends GraphBuilder {
 		}
 
 		public void parseLine(String line) {
-			/*final String PATH = "PATH: ";
-			if (line.startsWith(PATH)) {
-				this.currentPath = line.substring(PATH.length());
-			} else {*/
 				if (!line.isEmpty()) {
 					try {
 //						System.out.println(line);
@@ -212,7 +194,6 @@ public class MethodGraphBuilder extends GraphBuilder {
 							}
 							else {
 								String fullName = methodName.replaceFirst("CH.ifa.draw.","").replaceFirst("org.jhotdraw.","").replaceAll(" ", "");  // Remove spaces to match the info in the ccc file
-	//							System.out.println(fullName);
 								int id = this.entityIDs.getIDForEntity(fullName);
 								this.changeSet.add(id);
 							}
@@ -226,4 +207,9 @@ public class MethodGraphBuilder extends GraphBuilder {
 		}
 	}
 
+	class ChangeSet extends HashSet<Integer> {
+		private static final long serialVersionUID = 1L;
+		protected int transactionNo;
+		protected List<Long> revisions = new ArrayList<Long>();
+	}
 }

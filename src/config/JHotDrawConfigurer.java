@@ -7,6 +7,7 @@ public class JHotDrawConfigurer implements IConfigurer {
 	int startRevision = 0;
 	int endRevision = 0;//-1;//HEAD (the latest) revision
 	String URL = "";
+	String localURL;//repository root directory path
 	
 	@Override
 	public int getStartRevision() {
@@ -51,5 +52,11 @@ public class JHotDrawConfigurer implements IConfigurer {
 	@Override
 	public String getPassword() {
 		return Password;
+	}
+
+	@Override
+	public String getLocalURL() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
