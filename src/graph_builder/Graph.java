@@ -9,25 +9,9 @@ import java.util.HashMap;
 public class Graph {
 	
 	HashMap<String, HashMap<String, Long>> edges= new HashMap<String, HashMap<String,Long>>();
-//	long edgeNum = 0;
-	
-//	public SimpleGraph(){
-//	}
-	
-	private String refineKey (String key){
-		if(!key.contains("src/")){
-			return key;
-		}
-		
-		String ret = key.split("src/")[1];
-		if(ret.contains("jhotdraw/"))		
-			ret = ret.split("jhotdraw/")[1]; 
-		return ret;
-	}
+
 	
 	private void addEdge(String x, String y, long wieght) {
-		x = refineKey(x);
-		y = refineKey(y);
 		String first, second;
 		if (x.compareTo(y) < 0){
 			first = x;
@@ -49,7 +33,6 @@ public class Graph {
 	
 	//DeleteNode
 		public void deleteNode(String key){
-			key = refineKey(key);
 			if(edges.containsKey(key)){
 				edges.remove(key);
 			}
@@ -70,8 +53,6 @@ public class Graph {
 		
 		//ChangeKey
 		public void changeKey(String oldKey, String newKey){
-			oldKey = refineKey(oldKey);
-			newKey = refineKey(newKey);
 			
 			if(edges.containsKey(oldKey)){
 				HashMap<String, Long> temp = edges.get(oldKey);
@@ -98,8 +79,6 @@ public class Graph {
 	
 	
 	public Long getEdgeWieght(String x, String y){
-//		x = refineKey(x, "src/");
-//		y = refineKey(y, "src/");
 		String first, second;
 		if (x.compareTo(y) < 0){
 			first = x;
@@ -119,13 +98,6 @@ public class Graph {
 	
 	public void incrementEdge(String x, String y, long value) {
 		
-		if(x.contains("src") == false || y.contains("src") == false || x.contains("test") == true || y.contains("test") == true ){
-			return;
-		}
-		
-		x = refineKey(x);
-		y = refineKey(y);
-		
 		String first, second;
 		if (x.compareTo(y) < 0){
 			first = x;
@@ -138,10 +110,6 @@ public class Graph {
 		long newWieght = 1;
 		if (edges.containsKey(first) && edges.get(first).containsKey(second)){
 			newWieght = edges.get(first).get(second) + value;
-			
-//			HashMap<Long, Long> temp = edges.get(first);
-//			temp.put(second, newWieght);
-//			edges.put(first, temp);
 		}
 		addEdge(first, second, newWieght);
 	}
@@ -160,7 +128,6 @@ public class Graph {
 			Collections.sort(y_keys);
 			for(String y: y_keys)
 			{
-//				write to file x \t y \t weight
 				ps.println(x + "\t" + y + "\t" + edges.get(x).get(y));
 				
 			}
@@ -169,7 +136,6 @@ public class Graph {
 		ps.close();
 		
 		} catch (Exception e) {
-			// System.out.println("Can not Show the file.");
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
