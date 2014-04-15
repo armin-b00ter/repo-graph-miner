@@ -50,4 +50,10 @@ public class TomCatConfigurer implements IConfigurer {
 		return null;
 	}
 
+	@Override
+	public String getLocalURL() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
