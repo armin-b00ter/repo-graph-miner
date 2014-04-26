@@ -23,9 +23,15 @@ public abstract class GraphBuilder {
 		graph = new Graph();
 		this.config = null;
 		
+		//setupConfiguration(config);
+	}
+	
+	public void setConfigurer(IConfigurer config)
+	{
+		this.config = config;
 		setupConfiguration(config);
 	}
-
+	
 	public GraphBuilder(IConfigurer config)
 	{
 		graph = new Graph();
@@ -55,8 +61,10 @@ public abstract class GraphBuilder {
 	protected abstract ArrayList<ChangedItem> extractItem(int revisionNumber);
 	
 	
-	public void makeGraph(int revisionFrom, int revisionTo)
+	public void makeGraph(String outputFileName)
 	{
+		int revisionFrom = config.getStartRevision();
+		int revisionTo = config.getEndRevision();
 		// the graph creation code that uses extractItem.
 		for(int i = revisionFrom; i <= revisionTo; i++){
 			 ArrayList<ChangedItem> changedItems =  extractItem(i);	
@@ -81,7 +89,7 @@ public abstract class GraphBuilder {
                     graph.incrementEdge(item1.name, item2 .name, 1);
         		}
         	}			
-        	graph.save("StartReversion "+ revisionFrom+ " EndRevision "+ revisionTo+".txt");
+        	graph.save(outputFileName);
 		}
 	}
 	
