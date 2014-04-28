@@ -4,10 +4,10 @@ public class JHotDrawConfigurer implements IConfigurer {
 
 	String userName;
 	String Password;
-	int startRevision = 0;
-	int endRevision = 0;//-1;//HEAD (the latest) revision
-	String URL = "";
-	String localURL;//repository root directory path
+	int startRevision = 1;
+	int endRevision = 15;//-1;//HEAD (the latest) revision
+	String URL = "https://svn.code.sf.net/p/jhotdraw/svn/";	
+	String localURL="D:\\Workspace\\repos\\svn";//repository root directory path
 	
 	@Override
 	public int getStartRevision() {

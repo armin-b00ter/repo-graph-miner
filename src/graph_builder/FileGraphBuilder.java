@@ -28,7 +28,9 @@ public class FileGraphBuilder extends GraphBuilder{
             System.exit(1);
         }
 		
-		return handleLogActions(logEntries, graph);
+		ArrayList<ChangedItem> ret = handleLogActions(logEntries, graph);
+		System.out.println("Revision " + revisionNumber + " Finished.");
+		return ret ;
 		
 //		printLog(logEntries);
 //	    graph.save("StartReversion "+ startRevision+ " EndRevision "+ endRevision+".txt");

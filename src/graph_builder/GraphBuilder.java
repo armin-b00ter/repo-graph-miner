@@ -1,6 +1,8 @@
 package graph_builder;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
@@ -46,7 +48,6 @@ public abstract class GraphBuilder {
         String password = config.getPassword();
         
         setupLibrary();
-        SVNRepository svnRepository = null;
         try {
         	svnRepository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(url));
         } catch (SVNException svne) {
@@ -67,24 +68,30 @@ public abstract class GraphBuilder {
 		int revisionTo = config.getEndRevision();
 		// the graph creation code that uses extractItem.
 		for(int i = revisionFrom; i <= revisionTo; i++){
-			 ArrayList<ChangedItem> changedItems =  extractItem(i);	
-			for(ChangedItem item : changedItems){
+			ArrayList<ChangedItem> changedItems =  extractItem(i);
+			for(Iterator<ChangedItem> it=changedItems.iterator(); it.hasNext();)
+			{
+				ChangedItem item= it.next();
 				if(item.action == 'A' || item.action == 'R'){
                 	if(item.copyFromPath != null){
                 		graph.changeKey(item.copyFromPath, item.name);                		
-                		changedItems.remove(item);
+                		it.remove();
                 	}
                 }
 			}
 			
-			for(ChangedItem item : changedItems){
+			for(Iterator<ChangedItem> it=changedItems.iterator(); it.hasNext();)
+			{
+				ChangedItem item= it.next();
 				if(item.action == 'D'){
 	                	graph.deleteNode(item.name);	                	
-	                	changedItems.remove(item);
+	                	it.remove();
 	                }			
             }
 			
-        	for(ChangedItem item1 : changedItems){
+			for(Iterator<ChangedItem> it=changedItems.iterator(); it.hasNext();)
+			{
+				ChangedItem item1= it.next();
         		for(ChangedItem item2 : changedItems){
                     graph.incrementEdge(item1.name, item2 .name, 1);
         		}
