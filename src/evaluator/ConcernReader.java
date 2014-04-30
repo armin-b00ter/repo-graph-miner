@@ -1,5 +1,7 @@
 package evaluator;
 
+import graph_builder.GraphConverterUtil;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -11,12 +13,14 @@ import java.util.Set;
 
 import config.IConfigurer;
 
-public abstract class ConcernReader {
+public class ConcernReader {
 	IConfigurer config;
+	GraphConverterUtil convertor;
 	
-	public ConcernReader(IConfigurer config)
+	public ConcernReader(IConfigurer config, GraphConverterUtil convertor)
 	{
 		this.config = config;
+		this.convertor = convertor;
 	}
 	
 	public HashMap<String, Set<String>> getConcernList(boolean getMethod)
@@ -59,9 +63,9 @@ public abstract class ConcernReader {
 		for (int i = 0; i < calledMethods.length; i++) {
 			if (!"".equals(calledMethods[i]))
 				if(getMethod)
-					result.add(pathToMethodName(config.convertPathName((calledMethods[i]))));
+					result.add(Integer.toString(convertor.mapNode(pathToMethodName(config.convertPathName((calledMethods[i]))))));
 				else
-					result.add(pathToFileName(config.convertPathName((calledMethods[i]))));
+					result.add(Integer.toString(convertor.mapNode(pathToFileName(config.convertPathName((calledMethods[i]))))));
 		}
 		return result;
 	}
