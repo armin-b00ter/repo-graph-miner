@@ -5,7 +5,7 @@ public class JHotDrawConfigurer implements IConfigurer {
 	String userName;
 	String Password;
 	int startRevision = 1;
-	int endRevision = 15;//-1;//HEAD (the latest) revision
+	int endRevision = 311;//-1;//HEAD (the latest) revision
 	String URL = "https://svn.code.sf.net/p/jhotdraw/svn/";	
 	String localURL="D:\\Workspace\\repos\\svn";//repository root directory path
 	
@@ -62,7 +62,11 @@ public class JHotDrawConfigurer implements IConfigurer {
 
 	@Override
 	public String[] getConcernInputPaths() {
-		// TODO Auto-generated method stub
-		return null;
+		String[] ret = {
+				"case_study\\jhotdraw\\cross_jhd_dynamo.txt",
+				"case_study\\jhotdraw\\cross_jhd_fanin.txt",
+				"case_study\\jhotdraw\\cross_jhd_ident.txt"
+		};
+		return ret;
 	}
 }

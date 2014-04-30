@@ -1,10 +1,15 @@
+import evaluator.ConcernReader;
+import evaluator.F1Calculator;
+import evaluator.FolderF1Calculator;
 import external.RRWExecuter;
 import graph_builder.GraphBuilder;
 import graph_builder.GraphConverterUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Set;
 
 import config.IConfigurer;
 
@@ -44,11 +49,29 @@ public class Main {
 			RRWExecuter ex = new RRWExecuter(outDir, inputGraphName);
 			handleRunRRW(ex);
 		}
+		else if(args.length>=3 && args[0].equals("evaluate"))
+		{
+			GraphConverterUtil conv = new GraphConverterUtil();
+			String graphMappingName = "graph\\" + args[1] + "_" + args[2] + "_mapping";
+			conv.loadConversion(graphMappingName);
+			ConcernReader cccr = new ConcernReader(cf.getConfigurer(args[2]), conv);
+			handleEvaluator(cccr, args[1], args[2]);
+		}
 		else
 		{
 			System.out.println("Invalid action name");
 			printUsageRules();
 		}	
+	}
+	
+	private static void handleEvaluator(ConcernReader cccr, String method, String caseStudy)
+	{
+		boolean getMethod = method.equals("file")?true:false;
+		HashMap<String, Set<String>> cccs = cccr.getConcernList(getMethod);
+		F1Calculator f1 = new F1Calculator(cccs);
+		System.out.println(cccs.size());
+		new FolderF1Calculator("out\\" + method + "\\" + caseStudy).calculate(f1);
+		
 	}
 	
 	private static void handleRunRRW(RRWExecuter ex) throws IOException
@@ -81,8 +104,10 @@ public class Main {
 		System.out.println("Usage Parameters: [action_name] [parameter1, parameter2, ...]");
 		System.out.println("ACTION: \ngraph ( to generate graph )");
 		System.out.println("\tgraph [" + cf.getBuildersList() + "] [" + cf.getConfigurersList() + "]");
-		System.out.println("mine( to mine cccs from changesets and calculate F1 )");
+		System.out.println("mine( to mine cccs from changesets )");
 		System.out.println("\tmine [" + cf.getBuildersList() + "] [" + cf.getConfigurersList() + "]");
+		System.out.println("evaulate( to calculate F1 )");
+		System.out.println("\tevaluate [" + cf.getBuildersList() + "] [" + cf.getConfigurersList() + "]");
 	}
 
 }
