@@ -37,3 +37,6 @@ local.properties
  
 # Locally stored "Eclipse launch configurations"
 *.launch
+
+/graph/*
+/out/*
