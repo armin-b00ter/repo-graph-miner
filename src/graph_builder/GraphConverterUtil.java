@@ -12,6 +12,11 @@ public class GraphConverterUtil {
 	private HashMap<String, Integer> nodeDict = null;
 	private int nodeIDCounter = 1;
 	
+	public GraphConverterUtil()
+	{
+		nodeDict = new HashMap<String, Integer>();
+	}
+	
 	public GraphConverterUtil(String inputFile)
 	{
 		this.inputFile = inputFile;
