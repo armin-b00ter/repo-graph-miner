@@ -1,13 +1,19 @@
 package evaluator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
 public class F1Calculator {
-	ArrayList<Set<String>> ccc;
+	HashMap<String, Set<String>> ccc;
 	
-	private int setIntersectionCount(Set<String> set1, Set<String> set2)
+	public F1Calculator(HashMap<String, Set<String>> ccc)
+	{
+		this.ccc = ccc;
+	}
+	
+	private float setIntersectionCount(Set<String> set1, Set<String> set2)
 	{
 		int intersectionCount=0;
 		for(String s:set1)
@@ -17,29 +23,29 @@ public class F1Calculator {
 		return intersectionCount;		
 	}
 	
-	private int calculatePrecision(Set<String> exactSet, Set<String> testSet)
+	private float calculatePrecision(Set<String> exactSet, Set<String> testSet)
 	{
         return setIntersectionCount(exactSet, testSet)/testSet.size();		
 	}
 	
-	private int calculateRecall(Set<String> exactSet, Set<String> testSet)
+	private float calculateRecall(Set<String> exactSet, Set<String> testSet)
 	{
 		return setIntersectionCount(exactSet, testSet)/exactSet.size();
 	}
 	
 	public F1ReturnType calculateF1(Set<String> testSet)
 	{
-		int max = 0;
-        int maxPrecision = 0;
-        int maxRecall = 0;
+		float max = 0;
+        float maxPrecision = 0;
+        float maxRecall = 0;
         Set<String> maxSet = new HashSet<String>();
-        for(Set<String> set: ccc)
+        for(Set<String> set: ccc.values())
         {
-            int precision = calculatePrecision(set, testSet);
-            int recall = calculateRecall(set, testSet);
+            float precision = calculatePrecision(set, testSet);
+            float recall = calculateRecall(set, testSet);
             if(precision+recall==0)
                 continue;
-            int f1 = (2*recall*precision)/(recall+precision);
+            float f1 = (2*recall*precision)/(recall+precision);
             if(f1>max)
             {
                 max = f1;
@@ -54,12 +60,12 @@ public class F1Calculator {
 
 class F1ReturnType
 {
-	int maxF1;
-	int maxPrecision;
-	int maxRecall;
+	float maxF1;
+	float maxPrecision;
+	float maxRecall;
 	Set<String> maxF1Set;
 	
-	public F1ReturnType(int maxF1, int maxPrecision, int maxRecall, Set<String> maxF1Set)
+	public F1ReturnType(float maxF1, float maxPrecision, float maxRecall, Set<String> maxF1Set)
 	{
 		this.maxF1 = maxF1;
 		this.maxPrecision = maxPrecision;
