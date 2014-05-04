@@ -59,45 +59,45 @@ public abstract class GraphBuilder {
         svnRepository.setAuthenticationManager(authManager);
 	}
 	
-	protected abstract ArrayList<ChangedItem> extractItem(int revisionNumber);
+	protected abstract ArrayList<ChangedItem> extractItems();
 	
 	
 	public void makeGraph(String outputFileName)
 	{
-		int revisionFrom = config.getStartRevision();
-		int revisionTo = config.getEndRevision();
 		// the graph creation code that uses extractItem.
-		for(int i = revisionFrom; i <= revisionTo; i++){
-			ArrayList<ChangedItem> changedItems =  extractItem(i);
-			for(Iterator<ChangedItem> it=changedItems.iterator(); it.hasNext();)
-			{
-				ChangedItem item= it.next();
-				if(item.action == 'A' || item.action == 'R'){
-                	if(item.copyFromPath != null){
-                		graph.changeKey(item.copyFromPath, item.name);                		
-                		it.remove();
-                	}
-                }
-			}
-			
-			for(Iterator<ChangedItem> it=changedItems.iterator(); it.hasNext();)
-			{
-				ChangedItem item= it.next();
-				if(item.action == 'D'){
-	                	graph.deleteNode(item.name);	                	
-	                	it.remove();
-	                }			
+		System.out.println("Fetching Log Entries ...");
+		ArrayList<ChangedItem> changedItems =  extractItems();
+		System.out.println("Fetching Log Entries Finished ...");
+		System.out.println("Making Initial Graph ...");
+		for(Iterator<ChangedItem> it=changedItems.iterator(); it.hasNext();)
+		{
+			ChangedItem item= it.next();
+			if(item.action == 'A' || item.action == 'R'){
+            	if(item.copyFromPath != null){
+            		graph.changeKey(item.copyFromPath, item.name);                		
+            		it.remove();
+            	}
             }
-			
-			for(Iterator<ChangedItem> it=changedItems.iterator(); it.hasNext();)
-			{
-				ChangedItem item1= it.next();
-        		for(ChangedItem item2 : changedItems){
-                    graph.incrementEdge(item1.name, item2 .name, 1);
-        		}
-        	}			
-        	graph.save(outputFileName);
 		}
+		
+		for(Iterator<ChangedItem> it=changedItems.iterator(); it.hasNext();)
+		{
+			ChangedItem item= it.next();
+			if(item.action == 'D'){
+                	graph.deleteNode(item.name);	                	
+                	it.remove();
+                }			
+        }
+		
+		for(Iterator<ChangedItem> it=changedItems.iterator(); it.hasNext();)
+		{
+			ChangedItem item1= it.next();
+    		for(ChangedItem item2 : changedItems){
+                graph.incrementEdge(item1.name, item2 .name, 1);
+    		}
+    	}			
+    	graph.save(outputFileName);
+    	System.out.println("Making Initial Finished ...");
 	}
 	
 	
