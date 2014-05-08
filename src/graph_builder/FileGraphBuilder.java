@@ -3,8 +3,6 @@ package graph_builder;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
 import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -13,14 +11,14 @@ import java.util.Set;
 public class FileGraphBuilder extends GraphBuilder{
 
 	@Override
-	protected ArrayList<ChangedItem> extractItem(int revisionNumber) {
+	protected ArrayList<ChangedItem> extractItems() {
 		Collection logEntries = null;
         
         String url = config.getURL();
 		
 		try {
             logEntries = svnRepository.log(new String[] {""}, null,
-            		revisionNumber, revisionNumber, true, true);
+            		config.getStartRevision(), config.getEndRevision(), true, true);
 
         } catch (SVNException svne) {
             System.out.println("error while collecting log information for '"
@@ -29,11 +27,7 @@ public class FileGraphBuilder extends GraphBuilder{
         }
 		
 		ArrayList<ChangedItem> ret = handleLogActions(logEntries, graph);
-		System.out.println("Revision " + revisionNumber + " Finished.");
 		return ret ;
-		
-//		printLog(logEntries);
-//	    graph.save("StartReversion "+ startRevision+ " EndRevision "+ endRevision+".txt");
 	}
 	
 	 private ArrayList<ChangedItem> handleLogActions(Collection logEntries, Graph graph){
@@ -63,6 +57,7 @@ public class FileGraphBuilder extends GraphBuilder{
 	                    }	                    
 	                }
 	            }
+	            System.out.println("Revision " + logEntry.getRevision() + " Finished.");
 	    	}	    	
 	    	return changedItems;
 	    }
