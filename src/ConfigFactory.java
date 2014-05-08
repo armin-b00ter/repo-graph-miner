@@ -19,7 +19,7 @@ public class ConfigFactory {
 		configInstances.put("tomcat", new TomCatConfigurer());
 		
 		builderInstances.put("file", new FileGraphBuilder());
-		//builderInstances.put("method", new MethodGraphBuilder());
+		builderInstances.put("method", new MethodGraphBuilder());
 	}
 	
 	public String getConfigurersList()

@@ -29,6 +29,7 @@ public class Main {
 			}
 			else
 			{
+				new File("graph").mkdir();
 				String graphName = "graph\\" + args[1] + "_" + args[2];
 				System.out.println("Loading configuration ...");
 				builder.setConfigurer(config);
