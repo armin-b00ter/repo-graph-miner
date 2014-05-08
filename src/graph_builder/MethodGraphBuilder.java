@@ -25,7 +25,7 @@ public class MethodGraphBuilder extends GraphBuilder {
 		
 		ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(name, password);
 		SVNLookClient lookClient = new SVNLookClient(authManager, null);
-		MySVNDiffGenerator diffGenerator = new MySVNDiffGenerator();
+		MySVNDiffGenerator diffGenerator = new MySVNDiffGenerator(this.config);
 		lookClient.setDiffGenerator(diffGenerator);
 		
 		for(int revision=config.getStartRevision(); revision<=config.getEndRevision(); revision++)
@@ -110,7 +110,7 @@ class DiffJParser {
 	public void parseLine(String line) {
 			if (!line.isEmpty()) {
 				try {
-//					System.out.println(line);
+					System.out.println(line);
 					int colonPos = line.lastIndexOf(':');
 					String changeDescription = line.substring(0, colonPos);
 					String methodName = line.substring(colonPos + 2);
