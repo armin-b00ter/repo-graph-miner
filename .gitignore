@@ -40,3 +40,5 @@ local.properties
 
 /graph/*
 /out/*
+src/config/JHotDrawConfigurer.java
+src/config/TomCatConfigurer.java

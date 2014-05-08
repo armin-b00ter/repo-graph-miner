@@ -1,6 +1,6 @@
 package config;
 
-public class TomCatConfigurer implements IConfigurer {
+public class TomCatConfigurerSample implements IConfigurer {
 
 	@Override
 	public int getStartRevision() {
