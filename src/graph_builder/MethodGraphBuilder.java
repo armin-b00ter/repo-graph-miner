@@ -42,14 +42,19 @@ public class MethodGraphBuilder extends GraphBuilder {
 				
 				try 
 				{
-					lookClient.doGetDiff(new File(localUrl), SVNRevision.create(revision), false, true, true, out);
+					lookClient.doGetDiff(new File(localUrl), SVNRevision.create(revision), true, true, false, out);
 				} catch (SVNException e) {
 					System.out.println("The url probably does not exist in revision " + revision);
 					e.printStackTrace();
 					System.exit(0);
 				}
 				diffJReader.stop();
-				while(!diffJReader.hasStopped) System.out.print(".");
+				while(!diffJReader.hasStopped)
+				{
+					
+				}
+					//System.out.print(".");
+				//System.out.println('\n');
 				b.close();
 				in.close();
 				out.close();
@@ -57,6 +62,7 @@ public class MethodGraphBuilder extends GraphBuilder {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			System.out.println("*********************************");
 		}
 
 		return ret;
@@ -110,13 +116,14 @@ class DiffJParser {
 	public void parseLine(String line) {
 			if (!line.isEmpty()) {
 				try {
-					System.out.println(line);
+					
 					int colonPos = line.lastIndexOf(':');
 					String changeDescription = line.substring(0, colonPos);
 					String methodName = line.substring(colonPos + 2);
+					System.out.println(line);
 					if (!changeDescription.equals("method removed")) {
 						if (changeDescription.startsWith("parameter")) {
-							System.out.println(line);
+//							System.out.println(line);
 							String[] parts = methodName.split(">");
 							String oldMethodName = parts[0].trim().replaceFirst("CH.ifa.draw.","").replaceFirst("org.jhotdraw.","").replaceAll(" ", "");
 							String newMethodName = parts[1].trim().replaceFirst("CH.ifa.draw.","").replaceFirst("org.jhotdraw.","").replaceAll(" ", "");
@@ -124,14 +131,14 @@ class DiffJParser {
 							this.changeSet.add(item);		// Still record this as a method change
 						}
 						else {
-							String fullName = methodName.replaceFirst("CH.ifa.draw.","").replaceFirst("org.jhotdraw.","").replaceAll(" ", "");  // Remove spaces to match the info in the ccc file
+							String fullName = methodName.replaceAll(" ", "");  // Remove spaces to match the info in the ccc file
 							ChangedItem item = new ChangedItem(fullName, 'A', "");
 							this.changeSet.add(item);
 						}
 					}
 				}
 				catch (StringIndexOutOfBoundsException e) {
-					System.err.println("There is probably no colon in the following DiffJ output line: " + line);
+					//System.err.println("There is probably no colon in the following DiffJ output line: " + line);
 			}
 		}
 	}

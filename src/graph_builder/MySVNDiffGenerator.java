@@ -25,6 +25,10 @@ public class MySVNDiffGenerator extends DefaultSVNGNUDiffGenerator {
 			String rev1, String rev2, String mimeType1, String mimeType2,
 			OutputStream result) throws SVNException {
 		
+//		System.out.println(path);
+//		System.out.println(file1);
+//		System.out.println(file2);
+//		System.out.println("--------------------");
 		if (!config.igonreThisPath(path) && path.endsWith(".java")) 
 		{
 			PrintStream printStream = new PrintStream(result);
@@ -49,8 +53,6 @@ public class MySVNDiffGenerator extends DefaultSVNGNUDiffGenerator {
 	
 			try {
 				DiffJ dj = new DiffJ(new String[] {
-						"--source",
-						"1.5",
 						"--brief",
 						myFile1.toString(),
 						myFile2.toString()
