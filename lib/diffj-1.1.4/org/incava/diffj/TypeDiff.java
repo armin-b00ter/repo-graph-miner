@@ -10,7 +10,7 @@ import org.incava.java.*;
 import org.incava.lang.*;
 import org.incava.util.TimedEvent;
 
-import com.sun.org.apache.bcel.internal.generic.ClassObserver;
+
 
 
 public class TypeDiff extends ItemDiff
@@ -288,7 +288,8 @@ public class TypeDiff extends ItemDiff
                 addMsg = INNER_CLASS_ADDED;
                 remMsg = INNER_CLASS_REMOVED;
             }
-//            addDeclaration(added, addMsg, remMsg, name, other, coid);
+            String fullName = getClassPrefix(decl.getParentsOfType(ASTClassOrInterfaceDeclaration.class)) + name;
+            addDeclaration(added, addMsg, remMsg, fullName, other, coid);
             compareDeclarations((ASTClassOrInterfaceDeclaration) other, coid);
             
         }/*

@@ -60,6 +60,7 @@ public abstract class GraphBuilder {
 	}
 	
 	protected abstract ArrayList<ChangedItem> extractItems();
+	protected abstract ArrayList<ChangedItem> extractItems(ArrayList<ArrayList<String[]>> changedPackages, ArrayList<ChangedItem> deleted);
 	
 	
 	public void makeGraph(String outputFileName)
@@ -93,8 +94,9 @@ public abstract class GraphBuilder {
 		{
 			ChangedItem item1= it.next();
     		for(ChangedItem item2 : changedItems){
-                graph.incrementEdge(item1.name, item2 .name, 1);
+                graph.incrementEdge(item1.name, item2.name, 1);
     		}
+    		
     	}			
     	graph.save(outputFileName);
     	System.out.println("Making Initial Finished ...");

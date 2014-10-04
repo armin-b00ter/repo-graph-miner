@@ -1,0 +1,11 @@
+package removed: sameGame.logic
+constructor removed: sameGame.logic.Game.Game(int, int, int)
+method removed: sameGame.logic.Game.setRemainCell(int)
+method removed: sameGame.logic.Game.changeUpCell(int, int)
+method removed: sameGame.logic.Game.checkTable()
+method removed: sameGame.logic.Game.play(int, int)
+method removed: sameGame.logic.Game.getPlayerScore()
+method removed: sameGame.logic.Game.getBoard()
+method removed: sameGame.logic.Game.getNumRows()
+method removed: sameGame.logic.Game.getNUmCols()
+method removed: sameGame.logic.Game.getRemainCell()

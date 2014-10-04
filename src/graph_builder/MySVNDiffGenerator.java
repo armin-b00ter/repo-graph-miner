@@ -15,10 +15,43 @@ import config.IConfigurer;
 public class MySVNDiffGenerator extends DefaultSVNGNUDiffGenerator {
 	
 	IConfigurer config;
+	public MySVNDiffGenerator() {
+		
+	}
+	
 	public MySVNDiffGenerator(IConfigurer config)
 	{
 		this.config = config;
 	}
+	
+	
+	public void myDisplayFileDiff(File file1, File file2, OutputStream output){ 
+		try {
+			DiffJ dj = new DiffJ(new String[] {
+					"--brief",
+					file1.toString(),
+					file2.toString()
+			}, output);
+
+			// if (dj.exitValue != 0 && dj.exitValue != 1) {
+			if (dj.exitValue == -1) {
+				/*
+				 * SVNErrorMessage err = SVNErrorMessage.create(
+				 * SVNErrorCode.EXTERNAL_PROGRAM, "''{0}'' returned {1}",
+				 * new Object[] { "DiffJ", String.valueOf(dj.exitValue) });
+				 * SVNErrorManager.error(err, SVNLogType.DEFAULT);
+				 */
+				System.err.println("DiffJ returned with " + dj.exitValue
+						+ ". Please check.");
+			}
+		} catch (Exception e) {
+			// Catch all exceptions to make sure application does not quit
+			// just because of an error in DiffJ for one certain revision...
+			e.printStackTrace();
+		}
+
+	}
+
 	
 	@Override
 	public void displayFileDiff(String path, File file1, File file2,

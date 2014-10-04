@@ -59,6 +59,8 @@ public class TypesDiff extends ItemDiff
                 addDeleted(TYPE_DECLARATION_REMOVED, new Object[] { aName.image }, atd, b);
             }*/
             //else {
+            	PackageDiff pd = new PackageDiff(get());
+            	pd.compare(a, b);
                 TypeDiff differ = new TypeDiff(get());
                 differ.compare(atd, btd);
             //}

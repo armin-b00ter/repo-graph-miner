@@ -76,6 +76,23 @@ public class Graph {
 			
 			
 		}
+		
+		public void updateKeys(ArrayList<String[]> keys) {
+			ArrayList<String> x_keys = new ArrayList<String>(edges.keySet());
+			System.out.println("in the updateKeys" + keys.size());
+			
+			for(int i = 0; i < keys.size(); i++) {
+				System.err.println("I am in for updateKeys with size: " + keys.size());
+				String oldKey = (keys.get(i))[0];
+				String newKey = (keys.get(i))[1];
+				for(String x : x_keys) {
+					if(x.startsWith(oldKey)) {
+						String newNodeName = x.replaceFirst(oldKey, newKey);
+						changeKey(x, newNodeName);
+					}
+				}
+			}
+		}
 	
 	
 	public Long getEdgeWieght(String x, String y){
@@ -107,9 +124,11 @@ public class Graph {
 			second = x;
 		}
 		
+//		System.out.println(first + " " + second);
 		long newWieght = 1;
 		if (edges.containsKey(first) && edges.get(first).containsKey(second)){
 			newWieght = edges.get(first).get(second) + value;
+//			System.out.println("contains" + newWieght);
 		}
 		addEdge(first, second, newWieght);
 	}
