@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -11,15 +12,16 @@ public class GraphConverterUtil {
 	private String inputFile = null;
 	private HashMap<String, Integer> nodeDict = null;
 	private int nodeIDCounter = 1;
+	Graph graph;
 	
 	public GraphConverterUtil()
 	{
 		nodeDict = new HashMap<String, Integer>();
 	}
 	
-	public GraphConverterUtil(String inputFile)
+	public GraphConverterUtil(Graph graph)
 	{
-		this.inputFile = inputFile;
+		this.graph = graph;
 		nodeDict = new HashMap<String, Integer>();
 	}
 	
@@ -37,31 +39,12 @@ public class GraphConverterUtil {
 	
 	public void convertGraph(String outputFile)
 	{
-		Scanner sc = null;
-		BufferedWriter  bw = null;
-		try
-		{
-			sc = new Scanner(new File(inputFile));
-			bw = new BufferedWriter(new FileWriter(new File(outputFile)));
-			while(sc.hasNextLine())
-			{
-				String line = sc.nextLine();
-				String weightedEdge[] = line.split("\t");
-				bw.write(mapNode(weightedEdge[0]) + "\t" + mapNode(weightedEdge[1]) + "\t" + weightedEdge[2] + "\n");
-			}
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			sc.close();
-			try {
-				bw.close();
-			} catch (IOException e) {
-			}
-		}
+		Graph myGraph = new Graph();
+		for(String key_x: graph.edges.keySet())
+			for(String key_y: graph.edges.get(key_x).keySet())
+				myGraph.incrementEdge(String.valueOf(mapNode(key_x)), String.valueOf(mapNode(key_y)), graph.edges.get(key_x).get(key_y));
+
+		myGraph.save(outputFile, true);
 	}
 	
 	public void saveConversion(String outputFile)
@@ -110,4 +93,20 @@ public class GraphConverterUtil {
 			sc.close();
 		}
 	}
+}
+
+class MyIntegerComparator implements Comparator<String>
+{
+	@Override
+	public int compare(String o1, String o2) {
+		int i1 = Integer.parseInt(o1);
+		int i2 = Integer.parseInt(o2);
+		if(i1>i2)
+			return 1;
+		else if(i1<i2)
+			return -1;
+		else
+			return 0;
+	}
+	
 }

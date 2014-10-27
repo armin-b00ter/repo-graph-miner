@@ -3,7 +3,10 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Comparison;
 
 
 public class Graph {
@@ -79,10 +82,10 @@ public class Graph {
 		
 		public void updateKeys(ArrayList<String[]> keys) {
 			ArrayList<String> x_keys = new ArrayList<String>(edges.keySet());
-			System.out.println("in the updateKeys" + keys.size());
+			//System.out.println("in the updateKeys" + keys.size());
 			
 			for(int i = 0; i < keys.size(); i++) {
-				System.err.println("I am in for updateKeys with size: " + keys.size());
+				//System.err.println("I am in for updateKeys with size: " + keys.size());
 				String oldKey = (keys.get(i))[0];
 				String newKey = (keys.get(i))[1];
 				for(String x : x_keys) {
@@ -133,18 +136,20 @@ public class Graph {
 		addEdge(first, second, newWieght);
 	}
 	
-	public void save(String fileAddr){
+	public void save(String fileAddr, boolean doSort){
 		try{
 		FileOutputStream fout = new FileOutputStream(fileAddr);
 		PrintStream ps = new PrintStream(fout);
 		
 		ArrayList<String> x_keys=new ArrayList<String>(edges.keySet());
-		Collections.sort(x_keys);
+		if(doSort)
+			Collections.sort(x_keys, new IntegerComparator());
 		
 		for(String x: x_keys)
 		{
 			ArrayList<String> y_keys=new ArrayList<String>(edges.get(x).keySet());
-			Collections.sort(y_keys);
+			if(doSort)
+				Collections.sort(y_keys, new IntegerComparator());
 			for(String y: y_keys)
 			{
 				ps.println(x + "\t" + y + "\t" + edges.get(x).get(y));
@@ -159,4 +164,20 @@ public class Graph {
 			e.printStackTrace();
 		}
 	}
+}
+
+class IntegerComparator implements Comparator<String>
+{
+	@Override
+	public int compare(String o1, String o2) {
+		int i1 = Integer.parseInt(o1);
+		int i2 = Integer.parseInt(o2);
+		if(i1>i2)
+			return 1;
+		else if(i1<i2)
+			return -1;
+		else
+			return 0;
+	}
+	
 }

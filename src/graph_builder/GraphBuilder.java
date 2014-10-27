@@ -98,10 +98,16 @@ public abstract class GraphBuilder {
     		}
     		
     	}			
-    	graph.save(outputFileName);
+    	graph.save(outputFileName, false);
     	System.out.println("Making Initial Finished ...");
 	}
 	
+	public void convertGraph(String outputFile)
+	{
+		GraphConverterUtil conv = new GraphConverterUtil(graph);
+		conv.convertGraph(outputFile + "_converted");
+		conv.saveConversion(outputFile + "_mapping");
+	}
 	
 	private static void setupLibrary() {
         //For using over http:// and https://

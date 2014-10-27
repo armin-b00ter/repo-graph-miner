@@ -36,9 +36,7 @@ public class Main {
 				System.out.println("Making graph ...");
 				builder.makeGraph(graphName);
 				System.out.println("Converting graph ...");
-				GraphConverterUtil conv = new GraphConverterUtil(graphName);
-				conv.convertGraph(graphName + "_converted");
-				conv.saveConversion(graphName + "_mapping");
+				builder.convertGraph(graphName);
 				System.out.println("Graph files has been created successfully.");
 			}
 		}
