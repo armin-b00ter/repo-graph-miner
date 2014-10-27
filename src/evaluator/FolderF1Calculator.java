@@ -46,7 +46,7 @@ public class FolderF1Calculator {
 			while (sc.hasNextLine()) 
 			{
 				String line = sc.nextLine().trim();
-				String[] nodes = line.split("\t");
+				String[] nodes = line.split("[\t| ]");
 				Set<String> concern = new HashSet<String>(Arrays.asList(nodes));
 				ret.add(concern);
 			}
