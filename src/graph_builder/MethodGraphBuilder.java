@@ -31,19 +31,20 @@ public class MethodGraphBuilder extends GraphBuilder {
 		ArrayList<ArrayList<String[]>> changedPackages = new ArrayList<>();
 		ArrayList<ChangedItem> deleted = new ArrayList<>();
 		ArrayList<ChangedItem> changedItems =  extractItems(changedPackages, deleted);
-		System.out.println("Fetching Log Entries Finished ...");
+		System.out.println("Fetching Change Methods Finished ...");
 		System.out.println("Making Initial Graph ...");
 		
-		long loopRevision = changedItems.get(0).revision;
+		long loopRevision = changedItems.get(0).revision; // we shouldent give this from config because we want to work on changedItems and maybe a some start revision doesnt have ch
 		long lastRevision = changedItems.get(changedItems.size() - 1).revision;
 		long tempRevision = loopRevision;
 		int pack = 0;
 		
 		while (loopRevision <= lastRevision && changedItems.size() > 0) {
-			System.out.println("loop: " + loopRevision + "last: " + lastRevision);
+			System.out.println("revision: " + loopRevision + " -- last: " + lastRevision);
 			
+			//System.out.println("Packages");
 			while(pack < loopRevision) {
-				System.out.println(changedPackages.size() + ">:P" + pack);
+				//System.out.println(changedPackages.size() + ">:P" + pack);
 				graph.updateKeys(changedPackages.get(pack));
 				pack++;
 			}
@@ -62,9 +63,9 @@ public class MethodGraphBuilder extends GraphBuilder {
 					}
 				}
 			
+			//System.out.println("changeKeyLoop");
 			changeKey:
 				for (Iterator<ChangedItem> it = changedItems.iterator(); it.hasNext();) {
-					System.out.println("changeKeyLoop");
 					ChangedItem item = it.next();
 					tempRevision = item.revision;
 		
@@ -77,9 +78,9 @@ public class MethodGraphBuilder extends GraphBuilder {
 					}
 				}
 			
+			//System.out.println("deleteKeyLoop");
 			deleteKey:
 				for (Iterator<ChangedItem> it = changedItems.iterator(); it.hasNext();) {
-					System.out.println("deleteKeyLoop");
 					ChangedItem item = it.next();
 					tempRevision = item.revision;
 					
@@ -92,9 +93,9 @@ public class MethodGraphBuilder extends GraphBuilder {
 					}
 				}
 			
+			//System.out.println("incrementEdgeLoop");
 			incrementEdge:
 				for (Iterator<ChangedItem> it = changedItems.iterator(); it.hasNext();) {
-					System.out.println("incrementEdgeLoop");
 					ChangedItem item1 = it.next();
 					tempRevision = item1.revision;
 					
@@ -106,7 +107,7 @@ public class MethodGraphBuilder extends GraphBuilder {
 						for(int i = 0; i < changedItems.size(); i++) {
 							ChangedItem item2 = changedItems.get(i);
 							temp2 = item2.revision;
-							System.out.println("name1: " + item2.name + " " + temp2 + " name2: " + item1.name + " " + tempRevision);
+							//System.out.println("name1: " + item2.name + " " + temp2 + " name2: " + item1.name + " " + tempRevision);
 							
 							if(temp2 != tempRevision)
 								break innerLoop;
@@ -136,7 +137,7 @@ public class MethodGraphBuilder extends GraphBuilder {
 			}
 		}
  		
-    	graph.save(outputFileName);
+    	graph.save(outputFileName, false);
     	System.out.println("Making Initial Finished ...");
 	}
 	
@@ -343,7 +344,7 @@ class DiffJParser {
 						int colonPos = line.lastIndexOf(':');
 						String changeDescription = line.substring(0, colonPos);
 						String methodOrFileName = line.substring(colonPos + 2);
-						System.out.println(line);
+						//System.out.println(line);
 						//remove
 						if(changeDescription.equals("method removed") || changeDescription.equals("constructor removed")) {
 							String fullName = methodOrFileName.replaceAll(" ", "");  
