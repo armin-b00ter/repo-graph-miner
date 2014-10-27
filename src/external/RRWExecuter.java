@@ -16,17 +16,17 @@ public class RRWExecuter {
 	{
 		this.outputDir = outputDir;
 		this.inputFile = inputDir;
-		params.put("max", "11");
-		params.put("min", "5");
-		params.put("r", "0.7");
-		params.put("overlap", "0.2");
-		params.put("lambda", "0.6");
+		params.put("max", "35");
+		params.put("min", "20");
+		params.put("r", "0.1");
+		params.put("overlap", "0.9");
+		params.put("lambda", "0.1");
 	}
 	
 	public void execute() throws IOException
 	{
-		String[] paramArr = new String[params.size() * 2 + 6];
-		int i=6;
+		String[] paramArr = new String[params.size() * 2 + 7];
+		int i=7;
 		
 		for(String key: params.keySet())
 		{
@@ -42,11 +42,12 @@ public class RRWExecuter {
 		}
 		
 		paramArr[0] = "java";
-		paramArr[1] = "RRW";
-		paramArr[2] = "-i";
-		paramArr[3] = inputFile;
-		paramArr[4] = "-o";
-		paramArr[5] = outputFile;
+		paramArr[1] = "-Xmx4g";
+		paramArr[2] = "RRW";
+		paramArr[3] = "-i";
+		paramArr[4] = inputFile;
+		paramArr[5] = "-o";
+		paramArr[6] = outputFile;
 		
 		
 		ProcessBuilder pb = new ProcessBuilder(paramArr);
