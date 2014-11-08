@@ -70,34 +70,78 @@ public abstract class GraphBuilder {
 		ArrayList<ChangedItem> changedItems =  extractItems();
 		System.out.println("Fetching Log Entries Finished ...");
 		System.out.println("Making Initial Graph ...");
-		for(Iterator<ChangedItem> it=changedItems.iterator(); it.hasNext();)
-		{
-			ChangedItem item= it.next();
-			if(item.action == 'A' || item.action == 'R'){
-            	if(item.copyFromPath != null){
-            		graph.changeKey(item.copyFromPath, item.name);                		
-            		it.remove();
-            	}
-            }
+		
+		long loopRevision = changedItems.get(0).revision; // we shouldent give this from config because we want to work on changedItems and maybe a some start revision doesnt have ch
+		long lastRevision = changedItems.get(changedItems.size() - 1).revision;
+		long tempRevision = loopRevision;
+		while(loopRevision <= lastRevision && changedItems.size() > 0) {
+			
+			changeKey:
+			for(Iterator<ChangedItem> it=changedItems.iterator(); it.hasNext();)
+			{
+				//System.out.println("in changeKey" + loopRevision);
+				ChangedItem item= it.next();
+				tempRevision = item.revision;
+				//System.out.println(tempRevision);
+				
+				if(tempRevision > loopRevision)
+					break changeKey;
+				
+				if(item.action == 'A' || item.action == 'R'){
+	            	if(item.copyFromPath != null){
+	            		graph.changeKey(item.copyFromPath, item.name);                		
+	            		it.remove();
+	            	}
+	            }
+			}
+			
+		
+			deleteKey:
+			for(Iterator<ChangedItem> it=changedItems.iterator(); it.hasNext();)
+			{
+				ChangedItem item= it.next();
+				tempRevision = item.revision;
+				
+				//System.out.println("in deleteKey" + loopRevision);
+				//System.out.println(tempRevision);
+				if(tempRevision > loopRevision)
+					break deleteKey;
+				
+				if(item.action == 'D'){
+	                	graph.deleteNode(item.name);	                	
+	                	it.remove();
+	                }			
+	        }
+			
+			
+			incrementEdge:
+				for (Iterator<ChangedItem> it = changedItems.iterator(); it.hasNext();) {
+					ChangedItem item1 = it.next();
+					tempRevision = item1.revision;
+					
+					//System.out.println("in incrementEdge" + loopRevision);
+					//System.out.println(tempRevision);
+					if(tempRevision != loopRevision)
+						break incrementEdge;
+					
+					long temp2;
+					innerLoop:
+						for(int i = 0; i < changedItems.size(); i++) {
+							ChangedItem item2 = changedItems.get(i);
+							temp2 = item2.revision;
+							//System.out.println("name1: " + item2.name + " " + temp2 + " name2: " + item1.name + " " + tempRevision);
+							
+							if(temp2 != tempRevision)
+								break innerLoop;
+							
+							graph.incrementEdge(item1.name, item2.name, 1);
+						}
+					it.remove();
+				}
+				
+			loopRevision = tempRevision;
+			//System.out.println("mainloop"+loopRevision + " " +lastRevision);
 		}
-		
-		for(Iterator<ChangedItem> it=changedItems.iterator(); it.hasNext();)
-		{
-			ChangedItem item= it.next();
-			if(item.action == 'D'){
-                	graph.deleteNode(item.name);	                	
-                	it.remove();
-                }			
-        }
-		
-		for(Iterator<ChangedItem> it=changedItems.iterator(); it.hasNext();)
-		{
-			ChangedItem item1= it.next();
-    		for(ChangedItem item2 : changedItems){
-                graph.incrementEdge(item1.name, item2.name, 1);
-    		}
-    		
-    	}			
     	graph.save(outputFileName, false);
     	System.out.println("Making Initial Finished ...");
 	}

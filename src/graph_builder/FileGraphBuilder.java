@@ -31,10 +31,11 @@ public class FileGraphBuilder extends GraphBuilder{
 	}
 	
 	 private ArrayList<ChangedItem> handleLogActions(Collection logEntries, Graph graph){
+		 long currentRevision;
 		 ArrayList<ChangedItem> changedItems = new ArrayList<ChangedItem>();
 	    	for (Iterator entries = logEntries.iterator(); entries.hasNext();) {
 	    		SVNLogEntry logEntry = (SVNLogEntry) entries.next();
-	    		logEntry.getRevision()
+	    		currentRevision = logEntry.getRevision();
 	            //displaying all paths that were changed in that revision; changed path information is represented by SVNLogEntryPath.
 	            if (logEntry.getChangedPaths().size() > 0) {
 	            	Set changedPathsSet = logEntry.getChangedPaths().keySet();
@@ -45,14 +46,14 @@ public class FileGraphBuilder extends GraphBuilder{
 	                    if(entryPath.getCopyPath() == null){
 		                    if(config.igonreThisPath(entryPath.getPath())){
 			                    path = config.convertPathName(entryPath.getPath());
-			                    changedItems.add(new ChangedItem(path, entryPath.getType(), copyPath));	                    		
+			                    changedItems.add(new ChangedItem(path, entryPath.getType(), copyPath, currentRevision));	                    		
 		                		changedPaths.remove();
 		                    }
 	                    }else{	                    	
                     		if(config.igonreThisPath(entryPath.getPath()) && config.igonreThisPath(entryPath.getCopyPath())){
 			                    path = config.convertPathName(entryPath.getPath());
 			                    copyPath = config.convertPathName(entryPath.getCopyPath());
-			                    changedItems.add(new ChangedItem(path, entryPath.getType(), copyPath));	                    		
+			                    changedItems.add(new ChangedItem(path, entryPath.getType(), copyPath, currentRevision));	                    		
 		                		changedPaths.remove();
 	                    	}
 	                    }	                    
@@ -93,10 +94,9 @@ public class FileGraphBuilder extends GraphBuilder{
 	    	System.out.println("Counter : " + counter);
 	    }
 
+	
 	@Override
-	protected ArrayList<ChangedItem> extractItems(
-			ArrayList<String[]> changedPackages) {
-		// TODO Auto-generated method stub
+	protected ArrayList<ChangedItem> extractItems(ArrayList<ArrayList<String[]>> changedPackages, ArrayList<ChangedItem> deleted) {
 		return null;
 	}
 	
