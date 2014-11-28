@@ -1,10 +1,14 @@
 package graph_builder;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Scanner;
 
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Comparison;
 
@@ -128,7 +132,7 @@ public class Graph {
 		}
 		
 //		System.out.println(first + " " + second);
-		long newWieght = 1;
+		long newWieght = value;
 		if (edges.containsKey(first) && edges.get(first).containsKey(second)){
 			newWieght = edges.get(first).get(second) + value;
 //			System.out.println("contains" + newWieght);
@@ -161,6 +165,29 @@ public class Graph {
 		
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	public void load(String fileName)
+	{
+		try {
+			Scanner sc = new Scanner(new FileInputStream(new File(fileName)));
+			while(sc.hasNextLine())
+			{
+				String line = sc.nextLine();
+				if(!line.trim().isEmpty())
+				{
+					String[] arr = line.split("\t");
+					String x = arr[0]; 
+					String y = arr[1];
+					long value = Long.parseLong(arr[2]);
+					this.incrementEdge(x, y, value);
+				}
+			}
+			sc.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
