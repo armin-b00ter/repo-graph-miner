@@ -144,7 +144,7 @@ public class MethodGraphBuilder extends GraphBuilder {
 	private void manageFile(File file, long currentRevision, ArrayList<ChangedItem> changeSet) {
 		System.out.println("in manageFIle");
 		File myFile = file;
-		File empty = new File("C:\\Users\\vaio\\repo-graph-miner\\src\\Empty.java");
+		File empty = new File(System.getProperty("user.dir") + "Empty.java");
 		FileOutputStream output;
 		
 		try {

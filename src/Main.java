@@ -30,7 +30,7 @@ public class Main {
 			else
 			{
 				new File("graph").mkdir();
-				String graphName = "graph\\" + args[1] + "_" + args[2];
+				String graphName = "graph/" + args[1] + "_" + args[2];
 				System.out.println("Loading configuration ...");
 				builder.setConfigurer(config);
 				System.out.println("Making graph ...");
@@ -42,16 +42,16 @@ public class Main {
 		}
 		else if(args.length>=3 && args[0].equals("mine"))
 		{
-			String outDir = "out\\" + args[1] + "\\" + args[2];
+			String outDir = "out/" + args[1] + "/" + args[2];
 			new File(outDir).mkdirs();
-			String inputGraphName = "graph\\" + args[1] + "_" + args[2] + "_converted";
+			String inputGraphName = "graph/" + args[1] + "_" + args[2] + "_converted";
 			RRWExecuter ex = new RRWExecuter(outDir, inputGraphName);
 			handleRunRRW(ex);
 		}
 		else if(args.length>=3 && args[0].equals("evaluate"))
 		{
 			GraphConverterUtil conv = new GraphConverterUtil();
-			String graphMappingName = "graph\\" + args[1] + "_" + args[2] + "_mapping";
+			String graphMappingName = "graph/" + args[1] + "_" + args[2] + "_mapping";
 			conv.loadConversion(graphMappingName);
 			ConcernReader cccr = new ConcernReader(cf.getConfigurer(args[2]), conv);
 			handleEvaluator(cccr, args[1], args[2]);
@@ -69,7 +69,7 @@ public class Main {
 		HashMap<String, Set<String>> cccs = cccr.getConcernList(getMethod);
 		F1Calculator f1 = new F1Calculator(cccs);
 		System.out.println(cccs.size());
-		new FolderF1Calculator("out\\" + method + "\\" + caseStudy).calculate(f1);
+		new FolderF1Calculator("out/" + method + "/" + caseStudy).calculate(f1);
 		
 	}
 	

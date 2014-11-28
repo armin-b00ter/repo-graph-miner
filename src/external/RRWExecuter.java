@@ -34,7 +34,7 @@ public class RRWExecuter {
 			paramArr[i++] = params.get(key);
 		}
 		
-		String outputFile = outputDir + "\\out";
+		String outputFile = outputDir + "/out";
 		
 		for(String key: params.keySet())
 		{
@@ -51,7 +51,7 @@ public class RRWExecuter {
 		
 		
 		ProcessBuilder pb = new ProcessBuilder(paramArr);
-		pb.environment().put("CLASSPATH", System.getProperty("user.dir") + "\\lib\\RRW");
+		pb.environment().put("CLASSPATH", System.getProperty("user.dir") + "/lib/RRW");
 		Process process = pb.start();
 		InputStream is = process.getInputStream();
 		InputStreamReader isr = new InputStreamReader(is);
