@@ -44,13 +44,13 @@ public class FileGraphBuilder extends GraphBuilder{
 	                    SVNLogEntryPath entryPath = (SVNLogEntryPath) logEntry.getChangedPaths().get(changedPaths.next());	 
 	                    String path = null, copyPath = null;
 	                    if(entryPath.getCopyPath() == null){
-		                    if(config.igonreThisPath(entryPath.getPath())){
+		                    if(!config.igonreThisPath(entryPath.getPath())){
 			                    path = config.convertPathName(entryPath.getPath());
 			                    changedItems.add(new ChangedItem(path, entryPath.getType(), copyPath, currentRevision));	                    		
 		                		changedPaths.remove();
 		                    }
 	                    }else{	                    	
-                    		if(config.igonreThisPath(entryPath.getPath()) && config.igonreThisPath(entryPath.getCopyPath())){
+                    		if(!config.igonreThisPath(entryPath.getPath()) && !config.igonreThisPath(entryPath.getCopyPath())){
 			                    path = config.convertPathName(entryPath.getPath());
 			                    copyPath = config.convertPathName(entryPath.getCopyPath());
 			                    changedItems.add(new ChangedItem(path, entryPath.getType(), copyPath, currentRevision));	                    		
