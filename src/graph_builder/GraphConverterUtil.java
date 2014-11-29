@@ -72,6 +72,7 @@ public class GraphConverterUtil {
 	public void loadConversion(String inputFile)
 	{
 		Scanner sc = null;
+		int counter = 0;
 		HashMap<String, Integer> nodeMaps = new HashMap<String, Integer>();
 		try
 		{
@@ -81,8 +82,11 @@ public class GraphConverterUtil {
 				String line = sc.nextLine();
 				String mapNode[] = line.split("\t");
 				nodeMaps.put(mapNode[0], Integer.parseInt(mapNode[1]));
+				if(Integer.parseInt(mapNode[1])>counter)
+					counter = Integer.parseInt(mapNode[1]);
 			}
 			nodeDict = nodeMaps;
+			nodeIDCounter = counter+1;
 		}
 		catch(Exception e)
 		{
