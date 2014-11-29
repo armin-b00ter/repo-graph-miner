@@ -104,7 +104,7 @@ public abstract class GraphBuilder {
 				
 				//System.out.println("in deleteKey" + loopRevision);
 				//System.out.println(tempRevision);
-				if(tempRevision > loopRevision)
+				if(tempRevision != loopRevision)
 					break deleteKey;
 				
 				if(item.action == 'D'){

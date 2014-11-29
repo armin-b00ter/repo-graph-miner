@@ -35,6 +35,8 @@ public class FileGraphBuilder extends GraphBuilder{
 		 ArrayList<ChangedItem> changedItems = new ArrayList<ChangedItem>();
 	    	for (Iterator entries = logEntries.iterator(); entries.hasNext();) {
 	    		SVNLogEntry logEntry = (SVNLogEntry) entries.next();
+	    		if(logEntry.getChangedPaths().size()>40)
+	    			continue;
 	    		currentRevision = logEntry.getRevision();
 	            //displaying all paths that were changed in that revision; changed path information is represented by SVNLogEntryPath.
 	            if (logEntry.getChangedPaths().size() > 0) {
