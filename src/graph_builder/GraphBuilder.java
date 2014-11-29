@@ -134,7 +134,8 @@ public abstract class GraphBuilder {
 							if(temp2 != tempRevision)
 								break innerLoop;
 							
-							graph.incrementEdge(item1.name, item2.name, 1);
+							if(item1.name != item2.name)
+								graph.incrementEdge(item1.name, item2.name, 1);
 						}
 					it.remove();
 				}

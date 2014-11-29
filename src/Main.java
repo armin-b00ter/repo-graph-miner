@@ -65,7 +65,7 @@ public class Main {
 	
 	private static void handleEvaluator(ConcernReader cccr, String method, String caseStudy)
 	{
-		boolean getMethod = method.equals("file")?true:false;
+		boolean getMethod = method.equals("file")?false:true;
 		HashMap<String, Set<String>> cccs = cccr.getConcernList(getMethod);
 		F1Calculator f1 = new F1Calculator(cccs);
 		System.out.println(cccs.size());
