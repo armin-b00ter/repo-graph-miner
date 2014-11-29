@@ -65,7 +65,7 @@ public class ConcernReader {
 				if(getMethod)
 					result.add(Integer.toString(convertor.mapNode(pathToMethodName(config.convertPathName((calledMethods[i]))))));
 				else
-					result.add(Integer.toString(convertor.mapNode(pathToFileName(config.convertPathName((calledMethods[i]))))));
+					result.add(Integer.toString(convertor.mapNode(config.convertPathName(pathToFileName((calledMethods[i]))))));
 		}
 		return result;
 	}
