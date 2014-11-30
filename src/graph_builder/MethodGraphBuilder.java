@@ -28,8 +28,8 @@ public class MethodGraphBuilder extends GraphBuilder {
 	{
 		// the graph creation code that uses extractItem.
 		System.out.println("Fetching Log Entries ...");
-		ArrayList<ArrayList<String[]>> changedPackages = new ArrayList<>();
-		ArrayList<ChangedItem> deleted = new ArrayList<>();
+		ArrayList<ArrayList<String[]>> changedPackages = new ArrayList<ArrayList<String[]>>();
+		ArrayList<ChangedItem> deleted = new ArrayList<ChangedItem>();
 		ArrayList<ChangedItem> changedItems =  extractItems(changedPackages, deleted);
 		System.out.println("Fetching Change Methods Finished ...");
 		System.out.println("Making Initial Graph ...");
@@ -180,7 +180,7 @@ public class MethodGraphBuilder extends GraphBuilder {
 	
 	protected ArrayList<ChangedItem> extractItems(ArrayList<ArrayList<String[]>> packages, ArrayList<ChangedItem> deleted) {
 		ArrayList<ChangedItem> ret = new ArrayList<ChangedItem>();
-		ArrayList<String[]> deletedFiles = new ArrayList<>();
+		ArrayList<String[]> deletedFiles = new ArrayList<String[]>();
 		ArrayList<String[]> revPackages;
 		
 		 
@@ -203,7 +203,7 @@ public class MethodGraphBuilder extends GraphBuilder {
 				PipedOutputStream out = new PipedOutputStream();
 				PipedInputStream in = new PipedInputStream(out);
 				BufferedReader b = new BufferedReader(new InputStreamReader(in));
-				revPackages = new ArrayList<>();
+				revPackages = new ArrayList<String[]>();
 				packages.add(revPackages);
 				DiffJParser diffJParser = new DiffJParser(ret, deletedFiles, revPackages, this.svnRepository, revision);
 				DiffJReader diffJReader = new DiffJReader(b, diffJParser);
