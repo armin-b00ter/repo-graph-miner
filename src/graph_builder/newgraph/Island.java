@@ -7,6 +7,7 @@ import java.util.Set;
  * Created by Mohammad on 1/4/2015.
  */
 public class Island {
+
     private Set<Node> nodes = new HashSet<Node>();
 
     public void addNode(Node node) {
@@ -22,5 +23,9 @@ public class Island {
     @Override
     public String toString() {
         return nodes.toString();
+    }
+
+    public Set<Node> getNodes() {
+        return nodes;
     }
 }
