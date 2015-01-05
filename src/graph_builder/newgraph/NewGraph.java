@@ -54,6 +54,16 @@ public class NewGraph {
         NewGraph newGraph = new NewGraph("testResources/testGraph.txt");
         System.out.println(newGraph);
         System.out.println(newGraph.getIslands());
+        for (Island island : newGraph.getIslands()) {
+            System.out.println("island: " + island.getNodes());
+            for (Node node : island.getNodes()) {
+                List<Edge> sortedEdges = new ArrayList<Edge>(node.getEdges());
+                Collections.sort(sortedEdges);
+                System.out.println("node " + node.getId() + " " + sortedEdges);
+            }
+
+        }
+
     }
 
     public Set<Island> getIslands() {

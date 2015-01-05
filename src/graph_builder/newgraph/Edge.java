@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by Mohammad on 1/4/2015.
  */
-public class Edge {
+public class Edge implements Comparable<Edge> {
     private Node firstNode;
     private Node secondNode;
     private Integer weight;
@@ -35,5 +35,16 @@ public class Edge {
     @Override
     public String toString() {
         return firstNode.getId() + "\t" + secondNode.getId() + "\t" + weight;
+    }
+
+    @Override
+    public int compareTo(Edge other) {
+        if (this.weight < other.weight) {
+            return -1;
+        } else if (this.weight == other.weight) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 }

@@ -47,4 +47,9 @@ public class Node {
     public Set<Node> getNeighborNodes() {
         return nodeEdgeMap.keySet();
     }
+
+    public Collection<Edge> getEdges() {
+        Collection<Edge> edges = nodeEdgeMap.values();
+        return edges;
+    }
 }
