@@ -71,7 +71,7 @@ public class NewGraph {
 
         List<Node> notVisitedNodes = new ArrayList<Node>(nodes.values());
 
-        while (notVisitedNodes.size() != 0) {
+        while (!notVisitedNodes.isEmpty()) {
             Stack<Node> nodeStack = new Stack<Node>();
             Node startNode = notVisitedNodes.remove(0);
             nodeStack.push(startNode);
