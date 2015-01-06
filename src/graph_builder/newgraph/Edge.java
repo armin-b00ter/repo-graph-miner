@@ -1,5 +1,7 @@
 package graph_builder.newgraph;
 
+import org.incava.diffj.PackageDiff;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +47,20 @@ public class Edge implements Comparable<Edge> {
             return 0;
         } else {
             return 1;
+        }
+    }
+
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public Node getOtherNode(Node node) {
+        if (node.equals(firstNode)) {
+            return secondNode;
+        } else if (node.equals(secondNode)) {
+            return firstNode;
+        } else {
+            throw new IllegalArgumentException("node is not one of edge's node");
         }
     }
 }

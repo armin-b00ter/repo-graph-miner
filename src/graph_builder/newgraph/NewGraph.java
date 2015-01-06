@@ -1,5 +1,9 @@
 package graph_builder.newgraph;
 
+import graph_builder.newgraph.filter.FiltersApplier;
+import graph_builder.newgraph.filter.FirstDecileRemoveFilter;
+import graph_builder.newgraph.filter.MinNodeFilter;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -10,7 +14,7 @@ import java.util.*;
  */
 public class NewGraph {
     private Map<String, Node> nodes = new HashMap<String, Node>();
-    private Set<Edge> edges = new HashSet<Edge>();
+    private Map<Integer, Set<Edge>> edges = new HashMap<Integer, Set<Edge>>();
 
     public NewGraph(String intputDir) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(intputDir));
@@ -28,12 +32,23 @@ public class NewGraph {
             Node firstNode = getOrCreateNode(firstNodeStr);
             Node secondNode = getOrCreateNode(secondNodeStr);
 
-            Edge edge = new Edge(firstNode, secondNode, Integer.valueOf(splittedLine[2]));
-            edges.add(edge);
+            Integer weight = Integer.valueOf(splittedLine[2]);
+            Edge edge = new Edge(firstNode, secondNode, weight);
+
+            addEdgeToEdges(this.edges, weight, edge);
 
             firstNode.addEdge(edge);
             secondNode.addEdge(edge);
         }
+    }
+
+    private void addEdgeToEdges(Map<Integer, Set<Edge>> edges, Integer weight, Edge edge) {
+        Set<Edge> weightEdges = edges.get(weight);
+        if (weightEdges == null) {
+            weightEdges = new HashSet<Edge>();
+            edges.put(weight, weightEdges);
+        }
+        weightEdges.add(edge);
     }
 
     private Node getOrCreateNode(String nodeStr) {
@@ -51,19 +66,24 @@ public class NewGraph {
     }
 
     public static void main(String[] args) throws IOException {
-        NewGraph newGraph = new NewGraph("testResources/testGraph.txt");
-        System.out.println(newGraph);
-        System.out.println(newGraph.getIslands());
+        NewGraph newGraph = new NewGraph("graph/method_jhotdraw");
+        printIslands(newGraph);
+        FirstDecileRemoveFilter firstDecileRemoveFilter = new FirstDecileRemoveFilter();
+        MinNodeFilter minNodeFilter = new MinNodeFilter(3);
+        FiltersApplier filtersApplier = new FiltersApplier(firstDecileRemoveFilter, minNodeFilter);
+        newGraph = filtersApplier.execute(newGraph);
+        printIslands(newGraph);
+    }
+
+    private static void printIslands(NewGraph newGraph) {
         for (Island island : newGraph.getIslands()) {
             System.out.println("island: " + island.getNodes());
-            for (Node node : island.getNodes()) {
-                List<Edge> sortedEdges = new ArrayList<Edge>(node.getEdges());
-                Collections.sort(sortedEdges);
-                System.out.println("node " + node.getId() + " " + sortedEdges);
-            }
-
+//            for (Node node : island.getNodes()) {
+//                List<Edge> sortedEdges = new ArrayList<Edge>(node.getEdges());
+//                Collections.sort(sortedEdges);
+//                System.out.println("node " + node.getId() + " " + sortedEdges);
+//            }
         }
-
     }
 
     public Set<Island> getIslands() {
@@ -92,4 +112,45 @@ public class NewGraph {
 
         return islands;
     }
+
+    public void removeNodes(Collection<Node> nodesToRemove) {
+        Map<Integer, Set<Edge>> edgesToRemove = new HashMap<Integer, Set<Edge>>();
+        Set<String> nodesIdsToRemove = new HashSet<String>();
+        for (Node node : nodesToRemove) {
+            nodesIdsToRemove.add(node.getId());
+            node.removeNodeFromNeighbors();
+            for (Edge edge : node.getEdges()) {
+                addEdgeToEdges(edgesToRemove, edge.getWeight(), edge);
+            }
+        }
+        for (String nodeId : nodesIdsToRemove) {
+            nodes.remove(nodeId);
+        }
+
+        for (Map.Entry<Integer, Set<Edge>> integerSetEntry : edgesToRemove.entrySet()) {
+            edges.get(integerSetEntry.getKey()).removeAll(integerSetEntry.getValue());
+        }
+
+    }
+
+    public Map<String, Node> getNodes() {
+        return nodes;
+    }
+
+    public Set<Integer> getEdgesWeights() {
+        return edges.keySet();
+    }
+
+    public void removeWeights(Collection<Integer> firstDecile) {
+        for (Integer weight : firstDecile) {
+            for (Edge edge : edges.get(weight)) {
+                for (Node node : edge.getNodes()) {
+                    node.removeEdge(edge);
+                }
+
+            }
+            edges.remove(weight);
+        }
+    }
+
 }

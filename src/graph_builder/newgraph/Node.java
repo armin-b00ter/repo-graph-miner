@@ -52,4 +52,18 @@ public class Node {
         Collection<Edge> edges = nodeEdgeMap.values();
         return edges;
     }
+
+    /**
+     * this method removes this node from its neighbors
+     */
+    public void removeNodeFromNeighbors() {
+        for (Map.Entry<Node, Edge> nodeEdgeEntry : nodeEdgeMap.entrySet()) {
+            nodeEdgeEntry.getKey().removeEdge(nodeEdgeEntry.getValue());
+        }
+
+    }
+
+    public void removeEdge(Edge edge) {
+        nodeEdgeMap.remove(edge.getOtherNode(this));
+    }
 }
