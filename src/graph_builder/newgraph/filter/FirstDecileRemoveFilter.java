@@ -17,7 +17,7 @@ public class FirstDecileRemoveFilter implements NewGraphFilter {
         List<Integer> weights = new ArrayList<Integer>(weightsSet);
         Collections.sort(weights);
         Double firstDecileFloat = (Double.valueOf(weights.size())) / 10.0;
-        int firstDecileSize = (int) Math.ceil(firstDecileFloat);
+        int firstDecileSize = (int) Math.floor(firstDecileFloat);
         List<Integer> firstDecile = weights.subList(0, firstDecileSize);
         graph.removeWeights(firstDecile);
         return graph;

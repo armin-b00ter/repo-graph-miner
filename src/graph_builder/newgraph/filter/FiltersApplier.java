@@ -29,6 +29,8 @@ public class FiltersApplier implements NewGraphFilter {
     public NewGraph execute(NewGraph graph) {
         for (NewGraphFilter newGraphFilter : newGraphFilters) {
             graph = newGraphFilter.execute(graph);
+            System.out.println("filter "+ newGraphFilter.getClass().getName());
+            System.out.println("islands "+graph.getIslands().size());
         }
         return graph;
     }

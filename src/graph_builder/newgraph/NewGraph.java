@@ -1,9 +1,5 @@
 package graph_builder.newgraph;
 
-import graph_builder.newgraph.filter.FiltersApplier;
-import graph_builder.newgraph.filter.FirstDecileRemoveFilter;
-import graph_builder.newgraph.filter.MinNodeFilter;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -16,10 +12,16 @@ public class NewGraph {
     private Map<String, Node> nodes = new HashMap<String, Node>();
     private Map<Integer, Set<Edge>> edges = new HashMap<Integer, Set<Edge>>();
 
-    public NewGraph(String intputDir) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(intputDir));
-        String line = null;
+    public NewGraph(String inputDir) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(inputDir));
         nodes = new HashMap<String, Node>();
+        buildGraph(bufferedReader);
+        bufferedReader.close();
+    }
+
+    private void buildGraph(BufferedReader bufferedReader) throws IOException {
+        String line;
+        int lineNumber = 0;
         while ((line = bufferedReader.readLine()) != null) {
             String[] splittedLine = line.split("\\t");
             if (splittedLine.length != 3) {
@@ -31,14 +33,18 @@ public class NewGraph {
 
             Node firstNode = getOrCreateNode(firstNodeStr);
             Node secondNode = getOrCreateNode(secondNodeStr);
+            if (!firstNode.equals(secondNode)) {
+                Integer weight = Integer.valueOf(splittedLine[2]);
+                Edge edge = new Edge(firstNode, secondNode, weight);
 
-            Integer weight = Integer.valueOf(splittedLine[2]);
-            Edge edge = new Edge(firstNode, secondNode, weight);
+                addEdgeToEdges(this.edges, weight, edge);
 
-            addEdgeToEdges(this.edges, weight, edge);
-
-            firstNode.addEdge(edge);
-            secondNode.addEdge(edge);
+                firstNode.addEdge(edge);
+                secondNode.addEdge(edge);
+            } else {
+                System.out.println("line " + lineNumber + " is corrupted: " + line);
+            }
+            lineNumber++;
         }
     }
 
@@ -63,27 +69,6 @@ public class NewGraph {
     @Override
     public String toString() {
         return nodes.values() + "\n" + edges;
-    }
-
-    public static void main(String[] args) throws IOException {
-        NewGraph newGraph = new NewGraph("graph/method_jhotdraw");
-        printIslands(newGraph);
-        FirstDecileRemoveFilter firstDecileRemoveFilter = new FirstDecileRemoveFilter();
-        MinNodeFilter minNodeFilter = new MinNodeFilter(3);
-        FiltersApplier filtersApplier = new FiltersApplier(firstDecileRemoveFilter, minNodeFilter);
-        newGraph = filtersApplier.execute(newGraph);
-        printIslands(newGraph);
-    }
-
-    private static void printIslands(NewGraph newGraph) {
-        for (Island island : newGraph.getIslands()) {
-            System.out.println("island: " + island.getNodes());
-//            for (Node node : island.getNodes()) {
-//                List<Edge> sortedEdges = new ArrayList<Edge>(node.getEdges());
-//                Collections.sort(sortedEdges);
-//                System.out.println("node " + node.getId() + " " + sortedEdges);
-//            }
-        }
     }
 
     public Set<Island> getIslands() {
