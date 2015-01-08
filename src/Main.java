@@ -1,18 +1,16 @@
+import config.IConfigurer;
 import evaluator.ConcernReader;
 import evaluator.F1Calculator;
 import evaluator.FolderF1Calculator;
-import external.RRWExecuter;
 import graph_builder.GraphBuilder;
 import graph_builder.GraphConverterUtil;
+import graph_builder.newgraph.IslandsAlgorithmExecuter;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
-
-import config.IConfigurer;
-import graph_builder.newgraph.IslandsAlgorithmExecuter;
 
 
 public class Main {
