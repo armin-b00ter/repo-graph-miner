@@ -14,7 +14,6 @@ public class NewGraph {
 
     public NewGraph(String inputDir) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(inputDir));
-        nodes = new HashMap<String, Node>();
         buildGraph(bufferedReader);
         bufferedReader.close();
     }

@@ -1,7 +1,7 @@
 package graph_builder.newgraph;
 
 import graph_builder.newgraph.filter.FiltersApplier;
-import graph_builder.newgraph.filter.FirstDecileRemoveFilter;
+import graph_builder.newgraph.filter.FirstDecilesRemoveFilter;
 import graph_builder.newgraph.filter.MinNodeFilter;
 
 import java.io.*;
@@ -13,6 +13,7 @@ import java.util.HashMap;
 public class IslandsAlgorithmExecuter {
 
     public static final String MIN_NODES = "minNodes";
+    public static final String FIRST_DECILES_NUM = "firstDecilesNum";
 
     public HashMap<String, String> getParams() {
         return params;
@@ -26,7 +27,8 @@ public class IslandsAlgorithmExecuter {
     public IslandsAlgorithmExecuter(String outputDir, String inputDir) {
         this.outputDir = outputDir;
         this.inputFile = inputDir;
-        params.put(MIN_NODES, "3");
+        params.put(MIN_NODES, "5");
+        params.put(FIRST_DECILES_NUM, "1.0");
     }
 
     public void execute() throws IOException {
@@ -36,7 +38,7 @@ public class IslandsAlgorithmExecuter {
             outputFile += "_" + key + "-" + params.get(key);
         }
         NewGraph newGraph = new NewGraph(inputFile);
-        FirstDecileRemoveFilter firstDecileRemoveFilter = new FirstDecileRemoveFilter();
+        FirstDecilesRemoveFilter firstDecileRemoveFilter = new FirstDecilesRemoveFilter(Double.valueOf(params.get(FIRST_DECILES_NUM)));
         MinNodeFilter minNodeFilter = new MinNodeFilter(Integer.valueOf(params.get(MIN_NODES)));
         FiltersApplier filtersApplier = new FiltersApplier(firstDecileRemoveFilter, minNodeFilter);
         newGraph = filtersApplier.execute(newGraph);
